@@ -1,0 +1,13 @@
+services:
+  webpack:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pulse_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
