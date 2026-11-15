@@ -1,4 +1,4 @@
-export type NodeType = "normal" | "once" | "color" | "gate";
+export type NodeType = "normal" | "once" | "color" | "gate" | "timer" | "mirror";
 export type PulseColor = "white" | "red" | "blue";
 
 export interface NodeDef {
@@ -7,6 +7,8 @@ export interface NodeDef {
   y: number;
   type?: NodeType;
   color?: PulseColor;
+  limit?: number;
+  pair?: string;
 }
 
 export interface EdgeDef {
@@ -21,6 +23,7 @@ export interface LevelDef {
   start: string;
   nodes: NodeDef[];
   edges: EdgeDef[];
+  tip?: string;
 }
 
 export interface GameState {
@@ -29,6 +32,7 @@ export interface GameState {
   activated: Set<string>;
   consumed: Set<string>;
   path: string[];
+  positions: string[];
 }
 
 export function createState(level: LevelDef): GameState {
@@ -38,6 +42,7 @@ export function createState(level: LevelDef): GameState {
     activated: new Set([level.start]),
     consumed: new Set(),
     path: [level.start],
+    positions: [level.start],
   };
 }
 
@@ -45,7 +50,10 @@ function nodeById(level: LevelDef, id: string): NodeDef | undefined {
   return level.nodes.find((n) => n.id === id);
 }
 
+export const movesOf = (state: GameState): number => state.path.length - 1;
+
 export function legalMoves(level: LevelDef, state: GameState): string[] {
+  const moves = movesOf(state);
   const targets: string[] = [];
   for (const e of level.edges) {
     if (e.from === state.current) targets.push(e.to);
@@ -56,6 +64,8 @@ export function legalMoves(level: LevelDef, state: GameState): string[] {
     const n = nodeById(level, id);
     if (!n) return false;
     if (n.type === "gate" && n.color !== state.color) return false;
+    if (n.type === "timer" && n.limit !== undefined && moves >= n.limit) return false;
+    if (n.type === "mirror" && (!n.pair || n.pair === state.current)) return false;
     return true;
   });
 }
@@ -69,19 +79,22 @@ export function move(
 
   const from = nodeById(level, state.current)!;
   const target = nodeById(level, targetId)!;
+  const landing = target.type === "mirror" && target.pair ? nodeById(level, target.pair)! : target;
 
   const consumed = new Set(state.consumed);
   if (from.type === "once") consumed.add(from.id);
 
   const activated = new Set(state.activated);
-  activated.add(targetId);
+  activated.add(target.id);
+  activated.add(landing.id);
 
   return {
-    current: targetId,
+    current: landing.id,
     color: target.type === "color" && target.color ? target.color : state.color,
     activated,
     consumed,
     path: [...state.path, targetId],
+    positions: [...state.positions, landing.id],
   };
 }
 
@@ -91,23 +104,4 @@ export function isWon(level: LevelDef, state: GameState): boolean {
 
 export function isStuck(level: LevelDef, state: GameState): boolean {
   return !isWon(level, state) && legalMoves(level, state).length === 0;
-}
-
-const PENTATONIC = [261.63, 293.66, 329.63, 392.0, 440.0]; // C D E G A
-
-export function noteFor(stepIndex: number): number {
-  const octave = Math.floor(stepIndex / PENTATONIC.length);
-  return PENTATONIC[stepIndex % PENTATONIC.length] * 2 ** (octave % 3);
-}
-
-export function playNote(ctx: AudioContext, freq: number): void {
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = "sine";
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.2, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-  osc.connect(gain).connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.5);
 }

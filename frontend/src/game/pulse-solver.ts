@@ -19,12 +19,17 @@ interface Link {
   via: string | null;
 }
 
-function keyOf(s: GameState): string {
+export function timerCap(level: LevelDef): number {
+  return Math.max(0, ...level.nodes.map((n) => (n.type === "timer" ? (n.limit ?? 0) : 0)));
+}
+
+function keyOf(s: GameState, cap: number): string {
   return [
     s.current,
     s.color,
     [...s.activated].sort().join(","),
     [...s.consumed].sort().join(","),
+    cap ? Math.min(s.path.length - 1, cap) : 0,
   ].join("|");
 }
 
@@ -44,14 +49,15 @@ export function solve(
   from: GameState = createState(level),
   maxStates = 200_000
 ): SolveResult {
-  const startKey = keyOf(from);
+  const cap = timerCap(level);
+  const startKey = keyOf(from, cap);
   const parent = new Map<string, Link>([[startKey, { prev: null, via: null }]]);
   const queue: GameState[] = [from];
   let head = 0;
 
   while (head < queue.length) {
     const s = queue[head++];
-    const k = keyOf(s);
+    const k = keyOf(s, cap);
 
     if (isWon(level, s)) {
       return {
@@ -64,7 +70,7 @@ export function solve(
 
     for (const id of legalMoves(level, s)) {
       const next = move(level, s, id)!;
-      const nk = keyOf(next);
+      const nk = keyOf(next, cap);
       if (parent.has(nk)) continue;
       if (parent.size >= maxStates) {
         return { solvable: false, solution: null, explored: parent.size, truncated: true };
@@ -95,11 +101,23 @@ export function validateLevel(level: LevelDef): string[] {
     if ((n.type === "color" || n.type === "gate") && !n.color) {
       issues.push(`Knoten ${n.id} (${n.type}) hat keine Farbe`);
     }
+    if (n.type === "timer" && !(Number.isInteger(n.limit) && n.limit! >= 1)) {
+      issues.push(`Zeitknoten ${n.id} braucht ein ganzzahliges limit ab 1`);
+    }
+    if (n.type === "mirror") {
+      const twin = level.nodes.find((x) => x.id === n.pair);
+      if (!twin || twin.type !== "mirror" || twin.pair !== n.id || twin.id === n.id) {
+        issues.push(`Spiegelknoten ${n.id} braucht einen Zwilling, der zurück auf ihn zeigt`);
+      }
+    }
   }
 
   if (!ids.has(level.start)) issues.push(`Startknoten ${level.start} existiert nicht`);
 
+  const byId = new Map(level.nodes.map((n) => [n.id, n]));
   for (const e of level.edges) {
+    const a = byId.get(e.from);
+    if (a?.type === "mirror" && a.pair === e.to) issues.push(`Zwillinge ${e.from} und ${e.to} dürfen keine Kante teilen`);
     if (!ids.has(e.from)) issues.push(`Kante verweist auf unbekannten Knoten: ${e.from}`);
     if (!ids.has(e.to)) issues.push(`Kante verweist auf unbekannten Knoten: ${e.to}`);
   }
@@ -111,7 +129,15 @@ export function validateLevel(level: LevelDef): string[] {
       const cur = stack.pop()!;
       for (const e of level.edges) {
         const next = e.from === cur ? e.to : e.to === cur && !e.oneWay ? e.from : null;
-        if (next && ids.has(next) && !seen.has(next)) {
+        if (!next || !ids.has(next) || seen.has(next)) continue;
+        const nd = byId.get(next)!;
+        if (nd.type === "mirror" && nd.pair && ids.has(nd.pair)) {
+          seen.add(next);
+          if (!seen.has(nd.pair)) {
+            seen.add(nd.pair);
+            stack.push(nd.pair);
+          }
+        } else {
           seen.add(next);
           stack.push(next);
         }

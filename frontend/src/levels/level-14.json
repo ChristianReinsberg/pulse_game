@@ -1,0 +1,145 @@
+{
+  "id": 14,
+  "name": "Prüfung",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.5,
+      "y": 0.15
+    },
+    {
+      "id": "b",
+      "x": 0.5,
+      "y": 0.5,
+      "type": "once"
+    },
+    {
+      "id": "c",
+      "x": 0.7,
+      "y": 0.5,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "d",
+      "x": 0.7,
+      "y": 0.15,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "e",
+      "x": 0.3,
+      "y": 0.15
+    },
+    {
+      "id": "f",
+      "x": 0.9,
+      "y": 0.5,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "g",
+      "x": 0.3,
+      "y": 0.5
+    },
+    {
+      "id": "h",
+      "x": 0.9,
+      "y": 0.85
+    },
+    {
+      "id": "i",
+      "x": 0.5,
+      "y": 0.85,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "j",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "k",
+      "x": 0.3,
+      "y": 0.85,
+      "type": "once"
+    },
+    {
+      "id": "l",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "color",
+      "color": "red"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "a",
+      "to": "d"
+    },
+    {
+      "from": "a",
+      "to": "e"
+    },
+    {
+      "from": "c",
+      "to": "f"
+    },
+    {
+      "from": "b",
+      "to": "g"
+    },
+    {
+      "from": "f",
+      "to": "h"
+    },
+    {
+      "from": "b",
+      "to": "i"
+    },
+    {
+      "from": "g",
+      "to": "j"
+    },
+    {
+      "from": "g",
+      "to": "k"
+    },
+    {
+      "from": "l",
+      "to": "f",
+      "oneWay": true
+    },
+    {
+      "from": "d",
+      "to": "l"
+    },
+    {
+      "from": "d",
+      "to": "c",
+      "oneWay": true
+    },
+    {
+      "from": "e",
+      "to": "g"
+    },
+    {
+      "from": "k",
+      "to": "i"
+    }
+  ]
+}

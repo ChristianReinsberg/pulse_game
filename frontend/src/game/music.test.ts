@@ -15,16 +15,21 @@ const level = {
 } as LevelDef;
 
 describe("Tonarten", () => {
-  it("Level 1 bis 5 in C-Dur, ab Level 6 in a-Moll", () => {
+  it("hell am Anfang, ab Level 10 in a-Moll, ab 15 wieder hell (D-Dur)", () => {
     expect(keyForLevel(1)).toEqual({ root: 48, mode: "major" });
     expect(keyForLevel(5)).toEqual({ root: 48, mode: "major" });
-    expect(keyForLevel(6)).toEqual({ root: 45, mode: "minor" });
+    expect(keyForLevel(6)).toEqual({ root: 43, mode: "major" });
+    expect(keyForLevel(9)).toEqual({ root: 43, mode: "major" });
     expect(keyForLevel(10)).toEqual({ root: 45, mode: "minor" });
+    expect(keyForLevel(14)).toEqual({ root: 45, mode: "minor" });
+    expect(keyForLevel(15)).toEqual({ root: 38, mode: "major" });
+    expect(keyForLevel(19)).toEqual({ root: 38, mode: "major" });
+    expect(keyForLevel(20)).toEqual({ root: 40, mode: "minor" });
   });
   it("Tonstufen folgen der Pentatonik über Oktaven hinweg", () => {
     const c = keyForLevel(1);
     expect([0, 1, 2, 3, 4, 5].map((d) => degreeToMidi(c, d))).toEqual([48, 50, 52, 55, 57, 60]);
-    expect(degreeToMidi(keyForLevel(6), 1)).toBe(48);
+    expect(degreeToMidi(keyForLevel(10), 1)).toBe(48);
   });
   it("A4 hat 440 Hz", () => expect(midiToFreq(69)).toBeCloseTo(440, 5));
 });

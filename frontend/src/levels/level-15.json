@@ -1,0 +1,57 @@
+{
+  "id": 15,
+  "name": "Zerfall",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.1,
+      "y": 0.15
+    },
+    {
+      "id": "b",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 3
+    },
+    {
+      "id": "c",
+      "x": 0.5,
+      "y": 0.15
+    },
+    {
+      "id": "d",
+      "x": 0.5,
+      "y": 0.5
+    },
+    {
+      "id": "e",
+      "x": 0.5,
+      "y": 0.85
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "a",
+      "to": "c"
+    },
+    {
+      "from": "b",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "e"
+    },
+    {
+      "from": "c",
+      "to": "d"
+    }
+  ],
+  "tip": "Zeitknoten zerfallen: Jedes Segment ist ein Zug, den sie noch halten."
+}

@@ -27,16 +27,17 @@ export interface LevelKey {
 
 const SCALES: Record<Mode, number[]> = { major: [0, 2, 4, 7, 9], minor: [0, 3, 5, 7, 10] };
 
-export const LEVELS_PER_WORLD = 5;
-const WORLDS: LevelKey[] = [
-  { root: 48, mode: "major" }, // C-Dur: Level 1 to 5, lighter
-  { root: 45, mode: "minor" }, // a-Moll: Level 6 to 10, darker
-  { root: 43, mode: "major" }, // G-Dur
-  { root: 40, mode: "minor" }, // e-Moll
+const WORLDS: (LevelKey & { from: number })[] = [
+  { from: 1, root: 48, mode: "major" }, // C-Dur: basics
+  { from: 6, root: 43, mode: "major" }, // G-Dur: learn oneway nodes
+  { from: 10, root: 45, mode: "minor" }, // a-Moll: harder basics and oneway levels
+  { from: 15, root: 38, mode: "major" }, // D-Dur: time and mirror nodes
+  { from: 20, root: 40, mode: "minor" }, // e-Moll: may add some more levels later
 ];
 
 export function keyForLevel(levelId: number): LevelKey {
-  return WORLDS[Math.floor((levelId - 1) / LEVELS_PER_WORLD) % WORLDS.length];
+  const w = [...WORLDS].reverse().find((x) => levelId >= x.from) ?? WORLDS[0];
+  return { root: w.root, mode: w.mode };
 }
 
 export function degreeToMidi(key: LevelKey, degree: number): number {
@@ -45,6 +46,7 @@ export function degreeToMidi(key: LevelKey, degree: number): number {
 }
 
 export const midiToFreq = (midi: number): number => 440 * 2 ** ((midi - 69) / 12);
+
 const DEGREES = 12;
 
 export function nodeRanks(level: LevelDef): Map<string, number> {

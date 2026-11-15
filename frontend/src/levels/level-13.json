@@ -1,0 +1,120 @@
+{
+  "id": 13,
+  "name": "Engpass",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.633,
+      "y": 0.85
+    },
+    {
+      "id": "b",
+      "x": 0.367,
+      "y": 0.85
+    },
+    {
+      "id": "c",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "once"
+    },
+    {
+      "id": "d",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "once"
+    },
+    {
+      "id": "e",
+      "x": 0.367,
+      "y": 0.5
+    },
+    {
+      "id": "f",
+      "x": 0.9,
+      "y": 0.5,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "g",
+      "x": 0.633,
+      "y": 0.15,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "h",
+      "x": 0.367,
+      "y": 0.15,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "i",
+      "x": 0.1,
+      "y": 0.85,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "j",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "gate",
+      "color": "blue"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "a",
+      "to": "c"
+    },
+    {
+      "from": "a",
+      "to": "d"
+    },
+    {
+      "from": "e",
+      "to": "b",
+      "oneWay": true
+    },
+    {
+      "from": "c",
+      "to": "f"
+    },
+    {
+      "from": "c",
+      "to": "g"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    },
+    {
+      "from": "b",
+      "to": "i"
+    },
+    {
+      "from": "g",
+      "to": "j"
+    },
+    {
+      "from": "e",
+      "to": "c"
+    },
+    {
+      "from": "f",
+      "to": "d"
+    },
+    {
+      "from": "h",
+      "to": "e"
+    }
+  ]
+}

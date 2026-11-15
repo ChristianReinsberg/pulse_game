@@ -1,0 +1,64 @@
+{
+  "id": 17,
+  "name": "Spiegelbild",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.5,
+      "y": 0.85
+    },
+    {
+      "id": "b",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "mirror",
+      "pair": "e"
+    },
+    {
+      "id": "c",
+      "x": 0.9,
+      "y": 0.5
+    },
+    {
+      "id": "d",
+      "x": 0.9,
+      "y": 0.15
+    },
+    {
+      "id": "e",
+      "x": 0.5,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "b"
+    },
+    {
+      "id": "f",
+      "x": 0.1,
+      "y": 0.85
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "e"
+    },
+    {
+      "from": "a",
+      "to": "f"
+    }
+  ],
+  "tip": "Betrittst du einen Spiegel, erscheint der Impuls an seinem Zwilling."
+}

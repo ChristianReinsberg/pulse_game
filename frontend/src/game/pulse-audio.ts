@@ -121,7 +121,7 @@ export class PulseAudio {
     if (!ctx || !this.master) return;
     const gain = ctx.createGain();
     gain.gain.value = 0;
-    gain.gain.setTargetAtTime(0.06, ctx.currentTime, 0.8);
+    gain.gain.setTargetAtTime(0.035, ctx.currentTime, 0.8);
     gain.connect(this.master);
     const oscs = [0, 7].map((offset, i) => {
       const o = ctx.createOscillator();
