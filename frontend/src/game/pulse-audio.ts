@@ -65,10 +65,10 @@ export class PulseAudio {
     this.syncDrone();
   }
 
-  step(nodeId: string): void {
+  step(nodeId: string, delaySec = 0): void {
     const rank = this.ranks.get(nodeId);
     if (rank === undefined || !this.ctx || this.settings.muted) return;
-    this.playRank(rank, this.ctx.currentTime);
+    this.playRank(rank, this.ctx.currentTime + delaySec);
   }
 
   win(): void {

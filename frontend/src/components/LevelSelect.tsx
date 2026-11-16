@@ -70,6 +70,10 @@ export default function LevelSelect() {
         })}
       </ul>
 
+      <Link className="btn" href="/editor">
+        Eigene Level bauen
+      </Link>
+
       <Link className="link" href="/settings">
         Einstellungen
       </Link>

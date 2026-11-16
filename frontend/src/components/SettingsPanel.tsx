@@ -199,7 +199,7 @@ export default function SettingsPanel() {
         </label>
         <label className="check">
           <input type="checkbox" checked={settings.drone} onChange={(e) => updateSettings({ drone: e.target.checked })} />
-          Leiser Hintergrundklang im Spiel
+          Hintergrundklang im Spiel (optional)
         </label>
 
         <button className="btn" onClick={playPreview} disabled={settings.muted}>

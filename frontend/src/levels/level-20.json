@@ -1,0 +1,124 @@
+{
+  "id": 20,
+  "name": "Verwirrung",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.367,
+      "y": 0.5
+    },
+    {
+      "id": "b",
+      "x": 0.5,
+      "y": 0.85
+    },
+    {
+      "id": "c",
+      "x": 0.767,
+      "y": 0.675,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "d",
+      "x": 0.633,
+      "y": 0.325,
+      "type": "once"
+    },
+    {
+      "id": "e",
+      "x": 0.9,
+      "y": 0.5,
+      "type": "once"
+    },
+    {
+      "id": "f",
+      "x": 0.767,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "g",
+      "x": 0.367,
+      "y": 0.15,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "h",
+      "x": 0.1,
+      "y": 0.325,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "i",
+      "x": 0.1,
+      "y": 0.85,
+      "type": "color",
+      "color": "blue"
+    }
+  ],
+  "edges": [
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "e"
+    },
+    {
+      "from": "e",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "f"
+    },
+    {
+      "from": "f",
+      "to": "g"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    },
+    {
+      "from": "h",
+      "to": "i"
+    },
+    {
+      "from": "i",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "a"
+    },
+    {
+      "from": "a",
+      "to": "h"
+    },
+    {
+      "from": "h",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "c"
+    },
+    {
+      "from": "a",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "i",
+      "to": "a",
+      "oneWay": true
+    }
+  ]
+}

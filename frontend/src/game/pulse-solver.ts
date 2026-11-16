@@ -113,6 +113,10 @@ export function validateLevel(level: LevelDef): string[] {
   }
 
   if (!ids.has(level.start)) issues.push(`Startknoten ${level.start} existiert nicht`);
+  const startNode = level.nodes.find((n) => n.id === level.start);
+  if (startNode && (startNode.type === "mirror" || startNode.type === "gate" || startNode.type === "timer")) {
+    issues.push("Der Startknoten darf kein Spiegel-, Tor- oder Zeitknoten sein");
+  }
 
   const byId = new Map(level.nodes.map((n) => [n.id, n]));
   for (const e of level.edges) {

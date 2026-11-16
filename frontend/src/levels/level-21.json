@@ -1,0 +1,147 @@
+{
+  "id": 21,
+  "name": "Zwei Wege, ein Ziel",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.1,
+      "y": 0.85
+    },
+    {
+      "id": "b",
+      "x": 0.5,
+      "y": 0.675,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "d",
+      "x": 0.9,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 6
+    },
+    {
+      "id": "e",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "f",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "g"
+    },
+    {
+      "id": "g",
+      "x": 0.367,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "f"
+    },
+    {
+      "id": "h",
+      "x": 0.367,
+      "y": 0.5,
+      "type": "once"
+    },
+    {
+      "id": "i",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "j",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 7
+    }
+  ],
+  "edges": [
+    {
+      "from": "j",
+      "to": "i"
+    },
+    {
+      "from": "i",
+      "to": "g"
+    },
+    {
+      "from": "f",
+      "to": "d"
+    },
+    {
+      "from": "c",
+      "to": "a"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "e",
+      "to": "b",
+      "oneWay": true
+    },
+    {
+      "from": "h",
+      "to": "b"
+    },
+    {
+      "from": "e",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "h",
+      "to": "i"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    },
+    {
+      "from": "g",
+      "to": "e"
+    },
+    {
+      "from": "e",
+      "to": "f"
+    },
+    {
+      "from": "j",
+      "to": "a"
+    },
+    {
+      "from": "a",
+      "to": "h"
+    },
+    {
+      "from": "h",
+      "to": "j"
+    },
+    {
+      "from": "h",
+      "to": "e"
+    }
+  ]
+}
