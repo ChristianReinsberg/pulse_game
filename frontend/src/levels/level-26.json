@@ -1,0 +1,150 @@
+{
+  "id": 26,
+  "name": "Steifen",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.367,
+      "y": 0.85
+    },
+    {
+      "id": "b",
+      "x": 0.1,
+      "y": 0.85,
+      "type": "once"
+    },
+    {
+      "id": "c",
+      "x": 0.633,
+      "y": 0.85,
+      "type": "timer",
+      "limit": 12
+    },
+    {
+      "id": "d",
+      "x": 0.367,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 6
+    },
+    {
+      "id": "e",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "mirror",
+      "pair": "k"
+    },
+    {
+      "id": "f",
+      "x": 0.1,
+      "y": 0.15
+    },
+    {
+      "id": "g",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "h",
+      "x": 0.9,
+      "y": 0.5,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "i",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "j",
+      "x": 0.9,
+      "y": 0.15
+    },
+    {
+      "id": "k",
+      "x": 0.633,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "e"
+    },
+    {
+      "id": "l",
+      "x": 0.367,
+      "y": 0.15,
+      "type": "once"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "c",
+      "to": "a",
+      "oneWay": true
+    },
+    {
+      "from": "a",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "b",
+      "to": "e",
+      "oneWay": true
+    },
+    {
+      "from": "e",
+      "to": "f"
+    },
+    {
+      "from": "g",
+      "to": "c",
+      "oneWay": true
+    },
+    {
+      "from": "h",
+      "to": "g",
+      "oneWay": true
+    },
+    {
+      "from": "h",
+      "to": "i"
+    },
+    {
+      "from": "h",
+      "to": "j"
+    },
+    {
+      "from": "i",
+      "to": "k"
+    },
+    {
+      "from": "f",
+      "to": "l"
+    },
+    {
+      "from": "d",
+      "to": "i"
+    },
+    {
+      "from": "e",
+      "to": "d"
+    },
+    {
+      "from": "i",
+      "to": "c"
+    },
+    {
+      "from": "l",
+      "to": "d"
+    }
+  ]
+}

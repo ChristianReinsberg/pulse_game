@@ -1,0 +1,80 @@
+{
+  "id": 39,
+  "name": "Baumkrone",
+  "start": "f",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "b",
+      "x": 0.233,
+      "y": 0.5,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "c",
+      "x": 0.367,
+      "y": 0.15,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "d",
+      "x": 0.767,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 7
+    },
+    {
+      "id": "e",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "f",
+      "x": 0.5,
+      "y": 0.85
+    },
+    {
+      "id": "g",
+      "x": 0.633,
+      "y": 0.15,
+      "type": "color",
+      "color": "red"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "g",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "e"
+    },
+    {
+      "from": "d",
+      "to": "f"
+    },
+    {
+      "from": "f",
+      "to": "b"
+    }
+  ]
+}

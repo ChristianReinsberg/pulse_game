@@ -1,0 +1,82 @@
+{
+  "id": 28,
+  "name": "Einbahnstraßen",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.367,
+      "y": 0.5
+    },
+    {
+      "id": "b",
+      "x": 0.367,
+      "y": 0.15,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.633,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "d",
+      "x": 0.633,
+      "y": 0.5
+    },
+    {
+      "id": "e",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "f",
+      "x": 0.9,
+      "y": 0.5
+    },
+    {
+      "id": "g",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "once"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c",
+      "oneWay": true
+    },
+    {
+      "from": "a",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "c",
+      "to": "e"
+    },
+    {
+      "from": "e",
+      "to": "f"
+    },
+    {
+      "from": "b",
+      "to": "g"
+    },
+    {
+      "from": "d",
+      "to": "f",
+      "oneWay": true
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": 36,
+  "name": "Spiegelspiele",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.1,
+      "y": 0.85
+    },
+    {
+      "id": "b",
+      "x": 0.5,
+      "y": 0.5,
+      "type": "mirror",
+      "pair": "c"
+    },
+    {
+      "id": "c",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "mirror",
+      "pair": "b"
+    },
+    {
+      "id": "d",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "e"
+    },
+    {
+      "id": "e",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "d"
+    },
+    {
+      "id": "f",
+      "x": 0.233,
+      "y": 0.5,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "g",
+      "x": 0.767,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 8
+    },
+    {
+      "id": "h",
+      "x": 0.5,
+      "y": 0.85,
+      "type": "timer",
+      "limit": 5
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "e",
+      "to": "f"
+    },
+    {
+      "from": "h",
+      "to": "g"
+    },
+    {
+      "from": "b",
+      "to": "d"
+    },
+    {
+      "from": "b",
+      "to": "g",
+      "oneWay": true
+    },
+    {
+      "from": "c",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "f",
+      "to": "b"
+    },
+    {
+      "from": "f",
+      "to": "h"
+    }
+  ]
+}

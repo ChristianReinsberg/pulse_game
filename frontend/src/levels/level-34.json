@@ -1,0 +1,96 @@
+{
+  "id": 34,
+  "name": "Zwei Türme",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.1,
+      "y": 0.85
+    },
+    {
+      "id": "b",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.367,
+      "y": 0.15
+    },
+    {
+      "id": "d",
+      "x": 0.367,
+      "y": 0.85,
+      "type": "once"
+    },
+    {
+      "id": "e",
+      "x": 0.633,
+      "y": 0.85,
+      "type": "once"
+    },
+    {
+      "id": "f",
+      "x": 0.633,
+      "y": 0.15,
+      "type": "timer",
+      "limit": 7
+    },
+    {
+      "id": "g",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "h",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "gate",
+      "color": "red"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "d"
+    },
+    {
+      "from": "f",
+      "to": "e"
+    },
+    {
+      "from": "f",
+      "to": "g"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    },
+    {
+      "from": "h",
+      "to": "e"
+    },
+    {
+      "from": "d",
+      "to": "a"
+    },
+    {
+      "from": "d",
+      "to": "e",
+      "oneWay": true
+    }
+  ]
+}

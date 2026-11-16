@@ -1,0 +1,99 @@
+{
+  "id": 22,
+  "name": "Einfache Spiegel",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.633,
+      "y": 0.15
+    },
+    {
+      "id": "b",
+      "x": 0.367,
+      "y": 0.15,
+      "type": "timer",
+      "limit": 9
+    },
+    {
+      "id": "c",
+      "x": 0.367,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 6
+    },
+    {
+      "id": "d",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "e",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "mirror",
+      "pair": "h"
+    },
+    {
+      "id": "f",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "g",
+      "x": 0.367,
+      "y": 0.85,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "h",
+      "x": 0.1,
+      "y": 0.85,
+      "type": "mirror",
+      "pair": "e"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "a",
+      "to": "d"
+    },
+    {
+      "from": "c",
+      "to": "e"
+    },
+    {
+      "from": "b",
+      "to": "f"
+    },
+    {
+      "from": "c",
+      "to": "g"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    },
+    {
+      "from": "c",
+      "to": "d"
+    },
+    {
+      "from": "f",
+      "to": "e"
+    }
+  ]
+}

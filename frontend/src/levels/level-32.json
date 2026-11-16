@@ -1,0 +1,111 @@
+{
+  "id": 32,
+  "name": "Es war einmal",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.1,
+      "y": 0.85
+    },
+    {
+      "id": "b",
+      "x": 0.367,
+      "y": 0.675,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.367,
+      "y": 0.325,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "d",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "e",
+      "x": 0.767,
+      "y": 0.85,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "f",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "g",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "timer",
+      "limit": 4
+    },
+    {
+      "id": "h",
+      "x": 0.1,
+      "y": 0.5
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "d",
+      "to": "f"
+    },
+    {
+      "from": "f",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "g"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    },
+    {
+      "from": "b",
+      "to": "h",
+      "oneWay": true
+    },
+    {
+      "from": "h",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "d",
+      "to": "e",
+      "oneWay": true
+    },
+    {
+      "from": "e",
+      "to": "b",
+      "oneWay": true
+    },
+    {
+      "from": "c",
+      "to": "d",
+      "oneWay": true
+    },
+    {
+      "from": "c",
+      "to": "h",
+      "oneWay": true
+    }
+  ]
+}

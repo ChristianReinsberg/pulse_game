@@ -1,0 +1,122 @@
+{
+  "id": 29,
+  "name": "Grid",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.367,
+      "y": 0.15
+    },
+    {
+      "id": "b",
+      "x": 0.367,
+      "y": 0.5,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.633,
+      "y": 0.15
+    },
+    {
+      "id": "d",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 13
+    },
+    {
+      "id": "e",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "once"
+    },
+    {
+      "id": "f",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "g",
+      "x": 0.9,
+      "y": 0.5
+    },
+    {
+      "id": "h",
+      "x": 0.633,
+      "y": 0.85,
+      "type": "timer",
+      "limit": 3
+    },
+    {
+      "id": "i",
+      "x": 0.367,
+      "y": 0.85,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "j",
+      "x": 0.1,
+      "y": 0.85,
+      "type": "gate",
+      "color": "blue"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "a",
+      "to": "c"
+    },
+    {
+      "from": "b",
+      "to": "d"
+    },
+    {
+      "from": "e",
+      "to": "b",
+      "oneWay": true
+    },
+    {
+      "from": "d",
+      "to": "f"
+    },
+    {
+      "from": "e",
+      "to": "g"
+    },
+    {
+      "from": "e",
+      "to": "h"
+    },
+    {
+      "from": "b",
+      "to": "i"
+    },
+    {
+      "from": "d",
+      "to": "j",
+      "oneWay": true
+    },
+    {
+      "from": "c",
+      "to": "e"
+    },
+    {
+      "from": "i",
+      "to": "h"
+    },
+    {
+      "from": "j",
+      "to": "i"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": 23,
+  "name": "Leier",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.9,
+      "y": 0.15
+    },
+    {
+      "id": "b",
+      "x": 0.767,
+      "y": 0.325,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.367,
+      "y": 0.325,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "d",
+      "x": 0.1,
+      "y": 0.675,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "e",
+      "x": 0.5,
+      "y": 0.675,
+      "type": "gate",
+      "color": "red"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "e"
+    },
+    {
+      "from": "e",
+      "to": "b"
+    }
+  ]
+}

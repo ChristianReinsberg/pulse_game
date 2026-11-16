@@ -1,0 +1,130 @@
+{
+  "id": 40,
+  "name": "Blitze",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.5,
+      "y": 0.15
+    },
+    {
+      "id": "b",
+      "x": 0.367,
+      "y": 0.5,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 6
+    },
+    {
+      "id": "d",
+      "x": 0.5,
+      "y": 0.675,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "e",
+      "x": 0.367,
+      "y": 0.85,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "f",
+      "x": 0.767,
+      "y": 0.325
+    },
+    {
+      "id": "g",
+      "x": 0.767,
+      "y": 0.675,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "h",
+      "x": 0.633,
+      "y": 0.85,
+      "type": "mirror",
+      "pair": "l"
+    },
+    {
+      "id": "i",
+      "x": 0.233,
+      "y": 0.325,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "j",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "once"
+    },
+    {
+      "id": "k",
+      "x": 0.233,
+      "y": 0.675
+    },
+    {
+      "id": "l",
+      "x": 0.1,
+      "y": 0.85,
+      "type": "mirror",
+      "pair": "h"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "f"
+    },
+    {
+      "from": "f",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "g"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    },
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "e"
+    },
+    {
+      "from": "a",
+      "to": "i"
+    },
+    {
+      "from": "i",
+      "to": "j"
+    },
+    {
+      "from": "j",
+      "to": "k"
+    },
+    {
+      "from": "k",
+      "to": "l"
+    }
+  ]
+}

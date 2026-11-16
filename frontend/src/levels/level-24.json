@@ -1,0 +1,106 @@
+{
+  "id": 24,
+  "name": "Adler",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.1,
+      "y": 0.5
+    },
+    {
+      "id": "b",
+      "x": 0.367,
+      "y": 0.325,
+      "type": "gate",
+      "color": "blue"
+    },
+    {
+      "id": "c",
+      "x": 0.5,
+      "y": 0.15,
+      "type": "timer",
+      "limit": 5
+    },
+    {
+      "id": "d",
+      "x": 0.767,
+      "y": 0.325,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "e",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "h"
+    },
+    {
+      "id": "f",
+      "x": 0.633,
+      "y": 0.675,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "g",
+      "x": 0.767,
+      "y": 0.85,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "h",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "mirror",
+      "pair": "e"
+    },
+    {
+      "id": "i",
+      "x": 0.367,
+      "y": 0.675,
+      "type": "color",
+      "color": "blue"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "b",
+      "to": "c"
+    },
+    {
+      "from": "c",
+      "to": "d"
+    },
+    {
+      "from": "d",
+      "to": "e"
+    },
+    {
+      "from": "d",
+      "to": "f"
+    },
+    {
+      "from": "f",
+      "to": "i"
+    },
+    {
+      "from": "i",
+      "to": "a"
+    },
+    {
+      "from": "f",
+      "to": "g"
+    },
+    {
+      "from": "g",
+      "to": "h"
+    }
+  ]
+}

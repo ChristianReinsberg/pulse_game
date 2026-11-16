@@ -1,0 +1,142 @@
+{
+  "id": 30,
+  "name": "Das blaue Wunder",
+  "start": "a",
+  "nodes": [
+    {
+      "id": "a",
+      "x": 0.367,
+      "y": 0.5
+    },
+    {
+      "id": "b",
+      "x": 0.1,
+      "y": 0.5,
+      "type": "gate",
+      "color": "red"
+    },
+    {
+      "id": "c",
+      "x": 0.633,
+      "y": 0.5,
+      "type": "once"
+    },
+    {
+      "id": "d",
+      "x": 0.367,
+      "y": 0.15
+    },
+    {
+      "id": "e",
+      "x": 0.1,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "i"
+    },
+    {
+      "id": "f",
+      "x": 0.367,
+      "y": 0.85
+    },
+    {
+      "id": "g",
+      "x": 0.1,
+      "y": 0.85,
+      "type": "color",
+      "color": "blue"
+    },
+    {
+      "id": "h",
+      "x": 0.9,
+      "y": 0.5,
+      "type": "timer",
+      "limit": 5
+    },
+    {
+      "id": "i",
+      "x": 0.9,
+      "y": 0.15,
+      "type": "mirror",
+      "pair": "e"
+    },
+    {
+      "id": "j",
+      "x": 0.633,
+      "y": 0.85,
+      "type": "timer",
+      "limit": 10
+    },
+    {
+      "id": "k",
+      "x": 0.9,
+      "y": 0.85,
+      "type": "color",
+      "color": "red"
+    },
+    {
+      "id": "l",
+      "x": 0.633,
+      "y": 0.15,
+      "type": "gate",
+      "color": "red"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b"
+    },
+    {
+      "from": "a",
+      "to": "c"
+    },
+    {
+      "from": "a",
+      "to": "d"
+    },
+    {
+      "from": "b",
+      "to": "e"
+    },
+    {
+      "from": "a",
+      "to": "f"
+    },
+    {
+      "from": "f",
+      "to": "g"
+    },
+    {
+      "from": "c",
+      "to": "h"
+    },
+    {
+      "from": "h",
+      "to": "i"
+    },
+    {
+      "from": "f",
+      "to": "j"
+    },
+    {
+      "from": "h",
+      "to": "k"
+    },
+    {
+      "from": "d",
+      "to": "l"
+    },
+    {
+      "from": "c",
+      "to": "j"
+    },
+    {
+      "from": "l",
+      "to": "i"
+    },
+    {
+      "from": "l",
+      "to": "c"
+    }
+  ]
+}
