@@ -142,8 +142,6 @@ export class PulseGame {
     this.app.ticker.remove(this.tick);
   }
 
-  // ---------- Eingabe ----------
-
   private onTap(p: Point): void {
     if (this.busy) return;
     this.opts.audio?.resume();
@@ -275,13 +273,13 @@ export class PulseGame {
     g.clear();
     if (this.busy) return;
 
-    const k = this.reduceMotion ? 0 : (Math.sin(this.time / 450) + 1) / 2; // 0..1
+    const k = this.reduceMotion ? 0 : (Math.sin(this.time / 450) + 1) / 2;
     for (const id of this.legal) {
       const p = this.toScreen(this.nodeById(id));
       g.circle(p.x, p.y, 28 + 4 * k).stroke({ width: 2, color: 0xffffff, alpha: 0.25 + 0.3 * k });
     }
     if (this.flash) {
-      const prog = 1 - (this.flash.until - this.time) / FLASH_MS; // 0..1
+      const prog = 1 - (this.flash.until - this.time) / FLASH_MS;
       const p = this.toScreen(this.nodeById(this.flash.id));
       g.circle(p.x, p.y, 16 + 34 * prog).stroke({ width: 3, color: 0xffffff, alpha: Math.max(0, 0.8 * (1 - prog)) });
     }
@@ -339,7 +337,7 @@ export class PulseGame {
     const step = (tk: Ticker) => {
       t += tk.elapsedMS;
       const k = Math.min(t / STEP_MS, 1);
-      const ease = 1 - (1 - k) ** 3; // ease-out
+      const ease = 1 - (1 - k) ** 3;
       this.pulseG.clear();
       this.drawPulse({ x: from.x + (to.x - from.x) * ease, y: from.y + (to.y - from.y) * ease }, color);
       if (k >= 1) {

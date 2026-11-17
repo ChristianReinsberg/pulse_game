@@ -1,5 +1,6 @@
 import { GameState, LevelDef, createState, isWon, legalMoves, move } from "./pulse-core";
 import { timerCap } from "./pulse-solver";
+import i18next from "@/i18n";
 
 export interface LevelStats {
   solvable: boolean;
@@ -107,5 +108,5 @@ export function analyzeLevel(level: LevelDef, cap = 60000): LevelStats {
 export function difficultyOf(s: LevelStats): Difficulty | null {
   if (!s.solvable || s.moves === null) return null;
   const score = (s.trapPct / 100) * 0.6 + (Math.min(s.moves, 20) / 20) * 0.4;
-  return score < 0.35 ? "leicht" : score < 0.55 ? "mittel" : score < 0.75 ? "schwer" : "knifflig";
+  return score < 0.35 ? i18next.t('leicht') : score < 0.55 ? i18next.t('mittel') : score < 0.75 ? i18next.t('schwer') : i18next.t('knifflig');
 }

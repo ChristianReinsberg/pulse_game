@@ -8,6 +8,8 @@ import { BACKGROUND, buildTheme } from "@/game/theme";
 import { getSettings, pickAudio } from "@/lib/settings";
 import { useSettings } from "@/lib/useSettings";
 import { ActionLink, type Action } from "./ActionLink";
+import { useTranslation } from 'react-i18next'
+import '@/i18n';
 
 export interface WinInfo {
   best: number;
@@ -30,10 +32,11 @@ interface Result {
   info: WinInfo | null;
 }
 
-const STUCK_TEXT = "Sackgasse. Mach einen Zug rückgängig oder starte neu.";
-const UNSOLVABLE_TEXT = "Von hier aus ist das Level nicht mehr lösbar. Mach einen Zug rückgängig.";
+const STUCK_TEXT = 'stuckText';
+const UNSOLVABLE_TEXT = 'unsolvableText';
 
 export default function Playfield({ level, par, heading, back, onWin, primary, secondary }: Props) {
+  const { t } = useTranslation()
   const hostRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<PulseGame | null>(null);
   const audioRef = useRef<PulseAudio | null>(null);
@@ -90,7 +93,7 @@ export default function Playfield({ level, par, heading, back, onWin, primary, s
             setResult({ moves: m, info: onWinRef.current(m) });
             audio?.win();
           },
-          onStuck: () => setNotice(STUCK_TEXT),
+          onStuck: () => setNotice(t(STUCK_TEXT)),
         });
         gameRef.current = game;
       } catch {
@@ -121,7 +124,7 @@ export default function Playfield({ level, par, heading, back, onWin, primary, s
   }, [notice]);
 
   const showHint = () => {
-    if (gameRef.current?.hint() === "unsolvable") setNotice(UNSOLVABLE_TEXT);
+    if (gameRef.current?.hint() === "unsolvable") setNotice(t(UNSOLVABLE_TEXT));
   };
 
   return (
@@ -144,7 +147,7 @@ export default function Playfield({ level, par, heading, back, onWin, primary, s
       <div className="stage" ref={hostRef}>
         {failed && (
           <div className="overlay">
-            <p>Die Grafik konnte nicht gestartet werden. Bitte WebGL im Browser aktivieren.</p>
+            <p>{t('dieGrafikKonnteNichtGestartetWerdenBitte')}</p>
           </div>
         )}
         {notice && !result && (
@@ -153,21 +156,21 @@ export default function Playfield({ level, par, heading, back, onWin, primary, s
           </div>
         )}
         {result && (
-          <div className="overlay" role="dialog" aria-label="Level gelöst">
+          <div className="overlay" role="dialog" aria-label={t('levelGelst')}>
             <div className="card">
-              <h2>Gelöst!</h2>
+              <h2>{t('gelst')}</h2>
               <p>
-                {result.moves} Züge
-                {result.moves <= par ? " · ★ perfekt" : ` · Par ${par}`}
+                {t('movesZge', { moves: result.moves })}
+                {result.moves <= par ? t('perfekt') : t('parPar', { par })}
               </p>
               {result.info && !result.info.firstClear && (
-                <p className="sub">{result.info.improved ? "Neuer Bestwert!" : `Bestwert: ${result.info.best}`}</p>
+                <p className="sub">{result.info.improved ? t('neuerBestwert') : t('bestwertBest', { best: result.info.best })}</p>
               )}
               <ActionLink className="btn primary" action={primary}>
                 {primary.label}
               </ActionLink>
               <button className="btn" onClick={() => gameRef.current?.reset()}>
-                Noch einmal
+                {t('nochEinmal')}
               </button>
               {secondary && (
                 <ActionLink className="btn" action={secondary}>
@@ -181,13 +184,13 @@ export default function Playfield({ level, par, heading, back, onWin, primary, s
 
       <footer className="bar-bottom">
         <button className="btn" onClick={() => gameRef.current?.undo()} disabled={moves === 0}>
-          Zurück
+          {t('zurck')}
         </button>
         <button className="btn" onClick={showHint} disabled={!!result}>
-          Hinweis
+          {t('hinweis')}
         </button>
         <button className="btn" onClick={() => gameRef.current?.reset()} disabled={moves === 0}>
-          Neustart
+          {t('neustart')}
         </button>
       </footer>
     </main>

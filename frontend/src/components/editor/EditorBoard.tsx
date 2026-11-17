@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { COLS, ROWS, cellX, cellY } from "@/game/editor";
 import type { LevelDef, NodeDef, PulseColor } from "@/game/pulse-core";
 import { BACKGROUND, toHex, type Theme } from "@/game/theme";
+import { useTranslation } from 'react-i18next'
+import i18next from 'i18next'
 
 export type Tool = "add" | "edge" | "move" | "delete";
 
@@ -37,7 +39,6 @@ function arcPath(r: number, a0: number, a1: number): string {
   return `M ${p(a0)} A ${r} ${r} 0 0 1 ${p(a1)}`;
 }
 
-/** Gleiche Formen wie im Spiel, damit der Editor zeigt, was der Spieler sieht. */
 function NodeShape({ node, theme }: { node: NodeDef; theme: Theme }) {
   const white = toHex(theme.white);
   const base = toHex(theme[node.color ?? "white"]);
@@ -103,14 +104,15 @@ function nodeLabel(n: NodeDef): string {
   const kind: Record<string, string> = {
     once: "Einmal-Knoten",
     color: `Farbknoten ${n.color === "blue" ? "Raute" : "Dreieck"}`,
-    gate: `Tor ${n.color === "blue" ? "Raute" : "Dreieck"}`,
-    timer: `Zeitknoten, Limit ${n.limit}`,
-    mirror: `Spiegel, Zwilling ${n.pair}`,
+    gate: i18next.t('torVal', { val: n.color === "blue" ? "Raute" : "Dreieck" }),
+    timer: i18next.t('zeitknotenLimitLimit', { limit: n.limit }),
+    mirror: i18next.t('spiegelZwillingPair', { pair: n.pair }),
   };
-  return `Knoten ${n.id}, ${kind[n.type ?? ""] ?? "normal"}`;
+  return i18next.t('knotenIdVal', 'Knoten {{id}}, {{val}}', { id: n.id, val: kind[n.type ?? ""] ?? "normal" });
 }
 
 export default function EditorBoard({ level, theme, tool, selected, edgeFrom, pairFrom, onNode, onEmpty, onEdge, onMove }: Props) {
+  const { t } = useTranslation()
   const svgRef = useRef<SVGSVGElement>(null);
   const drag = useRef<{ id: string; moved: boolean; sx: number; sy: number } | null>(null);
   const [ghost, setGhost] = useState<{ id: string; x: number; y: number } | null>(null);
@@ -156,7 +158,7 @@ export default function EditorBoard({ level, theme, tool, selected, edgeFrom, pa
       className="board"
       viewBox={`0 0 ${W} ${H}`}
       role="application"
-      aria-label="Spielfeld des Level-Editors"
+      aria-label={t('spielfeldDesLeveleditors')}
       onPointerMove={moveEvt}
       onPointerUp={up}
       onPointerCancel={() => {

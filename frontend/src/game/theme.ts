@@ -1,4 +1,5 @@
 import type { PulseColor } from "./pulse-core";
+import i18next from "@/i18n";
 
 export type Theme = Record<PulseColor, number> & { dim: number };
 export type PaletteId = "standard" | "colorblind";
@@ -6,14 +7,14 @@ export type PaletteId = "standard" | "colorblind";
 export const BACKGROUND = "#0b0f1a";
 
 export const PALETTES: Record<PaletteId, { label: string; description: string; red: number; blue: number }> = {
-  standard: { label: "Standard", description: "Rot und Blau", red: 0xff5d73, blue: 0x4da3ff },
-  colorblind: { label: "Farbenblind-freundlich", description: "Orange und Himmelblau", red: 0xe69f00, blue: 0x56b4e9 },
+  standard: { label: i18next.t('standard'), description: i18next.t('rotUndBlau'), red: 0xff5d73, blue: 0x4da3ff },
+  colorblind: { label: i18next.t('farbenblindFreundlich'), description: i18next.t('orangeUndHimmelblau'), red: 0xe69f00, blue: 0x56b4e9 },
 };
 
 export const PULSE_SWATCHES = [
-  { label: "Weiß", hex: "#e8f1ff" },
-  { label: "Violett", hex: "#b794ff" },
-  { label: "Mint", hex: "#6ee7b7" },
+  { label: i18next.t('weiss'), hex: "#e8f1ff" },
+  { label: i18next.t('violett'), hex: "#b794ff" },
+  { label: i18next.t('mint'), hex: "#6ee7b7" },
 ];
 
 export const DEFAULT_PALETTE: PaletteId = "standard";

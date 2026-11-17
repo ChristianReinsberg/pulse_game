@@ -707,3 +707,14 @@ details.group[open]>summary {
   flex-wrap: wrap;
   gap: 8px;
 }
+
+.switcher {
+  display:flex;
+  gap: .5rem;
+  padding: .5rem 0;
+}
+
+.language-btn {
+  padding: .5rem .75rem;
+  gap: .25rem;
+}

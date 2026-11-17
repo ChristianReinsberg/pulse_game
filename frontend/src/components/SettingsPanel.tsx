@@ -16,6 +16,7 @@ import {
 } from "@/game/theme";
 import { pickAudio, resetSettings, updateSettings } from "@/lib/settings";
 import { useSettings } from "@/lib/useSettings";
+import { useTranslation, Trans } from 'react-i18next'
 
 type Shape = "circle" | "triangle" | "diamond";
 
@@ -30,6 +31,7 @@ function Glyph({ shape, color }: { shape: Shape; color: string }) {
 }
 
 export default function SettingsPanel() {
+  const { t } = useTranslation()
   const settings = useSettings();
   const [tooDark, setTooDark] = useState(false);
   const previewRef = useRef<PulseAudio | null>(null);
@@ -46,7 +48,7 @@ export default function SettingsPanel() {
     []
   );
 
-  if (!settings) return <main className="screen center">Lade …</main>;
+  if (!settings) return <main className="screen center">{t('lade')}</main>;
 
   const preview = buildTheme(settings.palette, settings.pulse);
 
@@ -67,14 +69,14 @@ export default function SettingsPanel() {
   return (
     <main className="screen">
       <header className="row">
-        <Link className="back" href="/" aria-label="Zur Übersicht">
+        <Link className="back" href="/" aria-label={t('zurBersicht')}>
           ←
         </Link>
-        <h1 className="h1-small">Einstellungen</h1>
+        <h1 className="h1-small">{t('einstellungen')}</h1>
       </header>
 
       <fieldset className="group">
-        <legend>Farbpalette</legend>
+        <legend>{t('farbpalette')}</legend>
         {(Object.keys(PALETTES) as PaletteId[]).map((id) => {
           const t = buildTheme(id, settings.pulse);
           return (
@@ -99,7 +101,7 @@ export default function SettingsPanel() {
       </fieldset>
 
       <fieldset className="group">
-        <legend>Pulsfarbe</legend>
+        <legend>{t('pulsfarbe', 'Pulsfarbe')}</legend>
         <div className="swatches">
           {PULSE_SWATCHES.map((s) => (
             <label key={s.hex} className={`swatch ${settings.pulse === s.hex ? "on" : ""}`} title={s.label}>
@@ -120,7 +122,7 @@ export default function SettingsPanel() {
             <input
               type="color"
               value={settings.pulse}
-              aria-label="Eigene Pulsfarbe"
+              aria-label={t('eigenePulsfarbe')}
               onChange={(e) => {
                 const v = e.target.value;
                 if (isReadable(v)) {
@@ -131,40 +133,39 @@ export default function SettingsPanel() {
                 }
               }}
             />
-            <small>Eigene</small>
+            <small>{t('eigene')}</small>
           </label>
         </div>
         {tooDark && (
           <p className="warn" role="status">
-            Diese Farbe ist auf dem dunklen Hintergrund zu schlecht zu sehen.
+            {t('dieseFarbeIstAufDemDunklenHintergrundZu')}
           </p>
         )}
       </fieldset>
 
-      <section className="group" aria-label="Vorschau">
-        <h2 className="legend">Vorschau</h2>
+      <section className="group" aria-label={t('vorschau')}>
+        <h2 className="legend">{t('vorschau')}</h2>
         <div className="preview">
           <div>
             <Glyph shape="circle" color={toHex(preview.white)} />
-            <small>Impuls</small>
+            <small>{t('impuls')}</small>
           </div>
           <div>
             <Glyph shape="triangle" color={toHex(preview.red)} />
-            <small>Dreieck-Farbe</small>
+            <small>{t('dreieckfarbe')}</small>
           </div>
           <div>
             <Glyph shape="diamond" color={toHex(preview.blue)} />
-            <small>Raute-Farbe</small>
+            <small>{t('rautefarbe')}</small>
           </div>
         </div>
         <p className="note">
-          Im Spiel erkennst du Farbknoten und Tore an ihrer Form: Dreieck und Raute stehen für die beiden Farben,
-          der Kreis für den neutralen Impuls. Die Farbe ist also nie der einzige Hinweis.
+          {t('imSpielErkennstDuFarbknotenUndToreAn')}
         </p>
       </section>
 
       <fieldset className="group">
-        <legend>Klang</legend>
+        <legend>{t('klang')}</legend>
         {(Object.keys(INSTRUMENTS) as InstrumentId[]).map((id) => (
           <label key={id} className={`choice ${settings.instrument === id ? "on" : ""}`}>
             <input
@@ -181,7 +182,7 @@ export default function SettingsPanel() {
         ))}
 
         <label className="slider">
-          <span>Lautstärke</span>
+          <span>{t('lautstrke')}</span>
           <input
             type="range"
             min={0}
@@ -194,18 +195,18 @@ export default function SettingsPanel() {
         </label>
 
         <label className="check">
-          <input type="checkbox" checked={settings.muted} onChange={(e) => updateSettings({ muted: e.target.checked })} />
-          Ton aus
+          <Trans i18nKey="tonAus"><input type="checkbox" checked={settings.muted} onChange={(e) => updateSettings({ muted: e.target.checked })} />
+          Ton aus</Trans>
         </label>
         <label className="check">
-          <input type="checkbox" checked={settings.drone} onChange={(e) => updateSettings({ drone: e.target.checked })} />
-          Hintergrundklang im Spiel (optional)
+          <Trans i18nKey="hintergrundklangImSpielOptional"><input type="checkbox" checked={settings.drone} onChange={(e) => updateSettings({ drone: e.target.checked })} />
+          Hintergrundklang im Spiel (optional)</Trans>
         </label>
 
         <button className="btn" onClick={playPreview} disabled={settings.muted}>
-          Probe hören
+          {t('probeHren')}
         </button>
-        <p className="note">Das Spiel ist auch ohne Ton vollständig spielbar.</p>
+        <p className="note">{t('dasSpielIstAuchOhneTonVollstndigSpielbar')}</p>
       </fieldset>
 
       <button
@@ -216,7 +217,7 @@ export default function SettingsPanel() {
         }}
         disabled={isDefault}
       >
-        Auf Standard zurücksetzen
+        {t('aufStandardZurcksetzen')}
       </button>
     </main>
   );

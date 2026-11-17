@@ -1,12 +1,13 @@
 import type { LevelDef } from "./pulse-core";
+import i18next from 'i18next';
 
 export type InstrumentId = "synth" | "piano" | "guitar" | "drums";
 
 export const INSTRUMENTS: Record<InstrumentId, { label: string; description: string }> = {
-  synth: { label: "Synthesizer", description: "Weicher, klarer Ton" },
-  piano: { label: "Klavier", description: "Angeschlagene Töne, die ausklingen" },
-  guitar: { label: "E-Gitarre", description: "Gezupfte Saite mit leichter Verzerrung" },
-  drums: { label: "Schlagzeug", description: "Jeder Knoten ein Drum-Sound, der Weg wird zum Rhythmus" },
+  synth: { label: i18next.t('synth'), description: i18next.t('synthDesc') },
+  piano: { label: i18next.t('piano'), description: i18next.t('pianoDesc') },
+  guitar: { label: i18next.t('guitar'), description: i18next.t('guitarDesc') },
+  drums: { label: i18next.t('drums'), description: i18next.t('drumsDesc') },
 };
 
 export interface AudioSettings {

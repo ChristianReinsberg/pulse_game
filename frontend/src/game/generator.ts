@@ -2,6 +2,7 @@ import { analyzeLevel, type Difficulty, type LevelStats } from "./analysis";
 import { cellX, cellY } from "./editor";
 import type { EdgeDef, LevelDef, NodeDef } from "./pulse-core";
 import { validateLevel } from "./pulse-solver";
+import i18next from 'i18next'
 
 export interface GenOptions {
   nodes: number;
@@ -144,7 +145,7 @@ function build(opts: GenOptions, r: () => number): LevelDef | null {
   const pOnce = opts.once ? 0.25 : 0;
   for (const node of free) if (r() < pOnce) node.type = "once";
 
-  return { id: 0, name: "Zufallslevel", start: nodes[0].id, nodes, edges: [...edgeMap.values()] };
+  return { id: 0, name: i18next.t('zufallslevel', 'Zufallslevel'), start: nodes[0].id, nodes, edges: [...edgeMap.values()] };
 }
 
 const stripped = (lv: LevelDef, type: "timer" | "mirror"): LevelDef => ({

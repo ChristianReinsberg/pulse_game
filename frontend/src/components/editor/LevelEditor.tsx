@@ -16,28 +16,30 @@ import { deleteUserLevel, getUserLevels, saveUserLevel, setDraft } from "@/lib/u
 import { useSettings } from "@/lib/useSettings";
 import { useUserLevels } from "@/lib/useUserLevels";
 import EditorBoard, { type Tool } from "./EditorBoard";
+import { useTranslation, Trans } from 'react-i18next';
+import "@/i18n";
 
 const TOOLS: { id: Tool; label: string; hint: string }[] = [
-  { id: "add", label: "Knoten", hint: "Tippe auf ein freies Feld, um einen Knoten zu setzen. Tippe einen Knoten an, um ihn zu bearbeiten." },
-  { id: "edge", label: "Kante", hint: "Tippe zwei Knoten nacheinander an. Jeder weitere Tipp auf dasselbe Paar wechselt: beidseitig, nur in die eine Richtung, nur in die andere, keine." },
-  { id: "move", label: "Bewegen", hint: "Ziehe einen Knoten an eine neue Stelle. Tippe einen Knoten an, um ihn zu bearbeiten." },
-  { id: "delete", label: "Löschen", hint: "Tippe einen Knoten oder eine Kante an, um sie zu löschen." },
+  { id: "add", label: 'knoten', hint: 'knotenHinweis' },
+  { id: "edge", label: 'kante', hint: 'kanteHinweis' },
+  { id: "move", label: 'bewegen', hint: 'bewegenHinweis' },
+  { id: "delete", label: 'lschen', hint: 'lschenHinweis' },
 ];
 
 const KINDS: { id: PlainType | "mirror"; label: string }[] = [
-  { id: "normal", label: "Normal" },
-  { id: "once", label: "Einmal" },
-  { id: "color", label: "Farbknoten" },
-  { id: "gate", label: "Tor" },
-  { id: "timer", label: "Zeit" },
-  { id: "mirror", label: "Spiegel" },
+  { id: "normal", label: 'normal' },
+  { id: "once", label: 'einmal' },
+  { id: "color", label: 'farbknoten' },
+  { id: "gate", label: 'tor' },
+  { id: "timer", label: 'zeit' },
+  { id: "mirror", label: 'spiegel' },
 ];
 
 const DIFFICULTIES: { id: Difficulty; label: string }[] = [
-  { id: "leicht", label: "Leicht" },
-  { id: "mittel", label: "Mittel" },
-  { id: "schwer", label: "Schwer" },
-  { id: "knifflig", label: "Knifflig" },
+  { id: "leicht", label: 'leicht' },
+  { id: "mittel", label: 'mittel' },
+  { id: "schwer", label: 'schwer' },
+  { id: "knifflig", label: 'knifflig' },
 ];
 
 interface GenSettings {
@@ -60,6 +62,7 @@ async function copyText(text: string): Promise<boolean> {
 }
 
 export default function LevelEditor() {
+  const { t } = useTranslation();
   const settings = useSettings();
   const theme = useMemo(() => (settings ? buildTheme(settings.palette, settings.pulse) : DEFAULT_THEME), [settings]);
   const saved = useUserLevels();
@@ -77,10 +80,9 @@ export default function LevelEditor() {
   const [busy, setBusy] = useState(false);
   const [importText, setImportText] = useState("");
   const [savedKey, setSavedKey] = useState<string | null>(null);
-  const [gen, setGen] = useState<GenSettings>({ nodes: 7, oneWay: true, once: false, colors: false, timers: false, mirror: false, difficulty: "mittel" });
+  const [gen, setGen] = useState<GenSettings>({ nodes: 7, oneWay: true, once: false, colors: false, timers: false, mirror: false, difficulty: 'Mittel' });
   const history = useRef<LevelDef[]>([]);
 
-  // Start: Code aus dem Link, sonst der zuletzt gesicherte Entwurf
   useEffect(() => {
     setOrigin(window.location.origin);
     let start: LevelDef | null = null;
@@ -101,7 +103,6 @@ export default function LevelEditor() {
     setLoaded(true);
   }, []);
 
-  // Entwurf automatisch sichern
   useEffect(() => {
     if (!loaded) return;
     const t = setTimeout(() => setDraft(encodeLevel(level)), 400);
@@ -113,8 +114,6 @@ export default function LevelEditor() {
     const t = setTimeout(() => setNotice(null), 6000);
     return () => clearTimeout(t);
   }, [notice]);
-
-  // ---------- Änderungen mit Rückgängig ----------
 
   const commit = (next: LevelDef) => {
     if (next === level) return;
@@ -153,13 +152,11 @@ export default function LevelEditor() {
     setPairFrom(null);
   };
 
-  // ---------- Eingaben auf dem Spielfeld ----------
-
   const onNode = (id: string) => {
     if (pairFrom) {
       if (id !== pairFrom) {
         const next = pairMirrors(level, pairFrom, id);
-        if (next === level) setNotice("Diese beiden Knoten lassen sich nicht zu einem Spiegelpaar machen (der Startknoten ist ausgenommen).");
+        if (next === level) setNotice(t('dieseBeidenKnotenLassenSichNichtZuEinem'));
         commit(next);
         setSelected(id);
       }
@@ -174,7 +171,7 @@ export default function LevelEditor() {
       case "edge":
         if (edgeFrom && edgeFrom !== id) {
           const next = cycleEdge(level, edgeFrom, id);
-          if (next === level) setNotice("Spiegel-Zwillinge lassen sich nicht verbinden.");
+          if (next === level) setNotice(t('spiegelzwillingeLassenSichNichtVerbinden'));
           commit(next);
         }
         setEdgeFrom(id);
@@ -194,7 +191,7 @@ export default function LevelEditor() {
     if (tool === "add") {
       const next = addNode(level, x, y);
       if (next === level) {
-        if (level.nodes.length >= MAX_NODES) setNotice(`Mehr als ${MAX_NODES} Knoten sind nicht möglich.`);
+        if (level.nodes.length >= MAX_NODES) setNotice(t('mehrAlsMaxNodesKnotenSindNichtMglich', { MAX_NODES }));
         return;
       }
       commit(next);
@@ -212,8 +209,6 @@ export default function LevelEditor() {
     setSelected(id);
   };
 
-  // ---------- Prüfung ----------
-
   const deferred = useDeferredValue(level);
   const issues = useMemo(() => validateLevel(deferred), [deferred]);
   const stats = useMemo(() => (issues.length ? null : analyzeLevel(deferred)), [deferred, issues]);
@@ -228,19 +223,15 @@ export default function LevelEditor() {
   const difficulty = stats ? difficultyOf(stats) : null;
   const selectedNode = level.nodes.find((n) => n.id === selected) ?? null;
 
-  // ---------- Aktionen ----------
-
   const share = async () => {
     if (!canShare) return;
     if (typeof navigator.share === "function") {
       try {
-        await navigator.share({ title: level.name, text: `Probier mein Pulse-Level „${level.name}“`, url: shareUrl });
-      } catch {
-        /* abgebrochen */
-      }
+        await navigator.share({ title: level.name, text: t('probierMeinPulselevelName', { name: level.name }), url: shareUrl });
+      } catch {}
       return;
     }
-    setNotice((await copyText(shareUrl)) ? "Link kopiert." : "Kopieren war nicht möglich. Markiere den Link unten und kopiere ihn von Hand.");
+    setNotice((await copyText(shareUrl)) ? t('linkKopiert') : t('kopierenWarNichtMglichMarkiereDenLink'));
   };
 
   const save = () => {
@@ -248,7 +239,7 @@ export default function LevelEditor() {
     if (key) {
       setSavedKey(key);
       setNotice("Gespeichert.");
-    } else setNotice("Du kannst höchstens 50 Level speichern. Lösche zuerst eines.");
+    } else setNotice(t('duKannstHchstens50LevelSpeichernLsche'));
   };
 
   const importCode = () => {
@@ -259,30 +250,29 @@ export default function LevelEditor() {
     }
     replaceAll(d.level);
     setImportText("");
-    setNotice("Level geladen.");
+    setNotice(t('levelGeladen'));
   };
 
   const newLevel = () => {
-    if (level.nodes.length > 1 && !window.confirm("Das aktuelle Level verwerfen? Nicht gespeicherte Änderungen gehen verloren.")) return;
+    if (level.nodes.length > 1 && !window.confirm(t('dasAktuelleLevelVerwerfenNicht'))) return;
     replaceAll(emptyLevel());
   };
 
   const generate = () => {
     setBusy(true);
     setNotice(null);
-    // kurz warten, damit die Anzeige "Suche läuft" erscheint, bevor die Suche den Browser beschäftigt
     setTimeout(() => {
       const res = generateLevel({ ...gen, seed: Math.floor(Math.random() * 1e9), budgetMs: 2000 });
       setBusy(false);
       if (!res) {
-        setNotice("Dazu habe ich in 2 Sekunden nichts Passendes gefunden. Wähle weniger Mechaniken, mehr Knoten oder eine andere Stufe.");
+        setNotice(t('dazuHabeIchIn2SekundenNichtsPassendes'));
         return;
       }
       commit({ ...res.level, name: level.name });
       setSelected(null);
       setEdgeFrom(null);
       setPairFrom(null);
-      setNotice(`Zufallslevel erzeugt: ${res.stats.moves} Züge.`);
+      setNotice(t('zufallslevelErzeugtMovesZge', { moves: res.stats.moves }));
     }, 30);
   };
 
@@ -290,29 +280,29 @@ export default function LevelEditor() {
     if (!selectedNode) return;
     if (kind === "mirror") {
       setPairFrom(selectedNode.id);
-      setNotice(`Tippe jetzt den Zwilling von Knoten ${selectedNode.id} an.`);
+      setNotice(t('tippeJetztDenZwillingVonKnotenIdAn', { id: selectedNode.id }));
       return;
     }
     commit(setNodeType(level, selectedNode.id, kind));
   };
 
-  if (!loaded) return <main className="screen center">Lade …</main>;
+  if (!loaded) return <main className="screen center">{t('lade')}</main>;
 
   const isStart = selectedNode?.id === level.start;
-  const hint = pairFrom ? `Tippe den Zwilling von Knoten ${pairFrom} an (oder ins Leere zum Abbrechen).` : TOOLS.find((t) => t.id === tool)!.hint;
+  const hint = pairFrom ? t('tippeDenZwillingVonKnotenPairFromAnOder', { pairFrom }) : t(TOOLS.find((t) => t.id === tool)!.hint);
 
   return (
     <main className="editor">
       <header className="row">
-        <Link className="back" href="/" aria-label="Zur Übersicht">
+        <Link className="back" href="/" aria-label={t('zurBersicht')}>
           ←
         </Link>
-        <h1 className="h1-small">Level-Editor</h1>
+        <h1 className="h1-small">{t('leveleditor')}</h1>
       </header>
 
       <input
         className="field"
-        aria-label="Name des Levels"
+        aria-label={t('nameDesLevels')}
         value={level.name}
         maxLength={MAX_NAME}
         onChange={(e) => setLevel(renameLevel(level, e.target.value))}
@@ -331,14 +321,14 @@ export default function LevelEditor() {
         onMove={onMove}
       />
 
-      <div className="toolbar" role="toolbar" aria-label="Werkzeuge">
-        {TOOLS.map((t) => (
-          <button key={t.id} className={`tool ${tool === t.id ? "on" : ""}`} aria-pressed={tool === t.id} onClick={() => chooseTool(t.id)}>
-            {t.label}
+      <div className="toolbar" role="toolbar" aria-label={t('werkzeuge')}>
+        {TOOLS.map((to) => (
+          <button key={to.id} className={`tool ${tool === to.id ? "on" : ""}`} aria-pressed={tool === to.id} onClick={() => chooseTool(to.id)}>
+            {t(to.label)}
           </button>
         ))}
         <button className="tool" onClick={undo} disabled={!canUndo}>
-          Rückgängig
+          {t('rckgngig')}
         </button>
       </div>
       <p className="note" role="status">
@@ -351,8 +341,8 @@ export default function LevelEditor() {
       )}
 
       {selectedNode && (
-        <section className="group" aria-label={`Knoten ${selectedNode.id} bearbeiten`}>
-          <h2 className="legend">Knoten {selectedNode.id}{isStart ? " (Start)" : ""}</h2>
+        <section className="group" aria-label={t('knotenIdBearbeiten', { id: selectedNode.id })}>
+          <h2 className="legend">{t('knotenId', { id: selectedNode.id })}{isStart ? t('start') : ""}</h2>
           <div className="kinds">
             {KINDS.map((k) => {
               const current = (selectedNode.type ?? "normal") === k.id;
@@ -363,17 +353,17 @@ export default function LevelEditor() {
                   className={`tool ${current ? "on" : ""}`}
                   aria-pressed={current}
                   disabled={blocked}
-                  title={blocked ? "Der Startknoten kann das nicht sein" : undefined}
+                  title={blocked ? t('derStartknotenKannDasNichtSein') : undefined}
                   onClick={() => chooseKind(k.id)}
                 >
-                  {k.label}
+                  {t(k.label)}
                 </button>
               );
             })}
           </div>
 
           {(selectedNode.type === "color" || selectedNode.type === "gate") && (
-            <div className="kinds" role="group" aria-label="Farbe">
+            <div className="kinds" role="group" aria-label={t('farbe', 'Farbe')}>
               {(["red", "blue"] as PulseColor[]).map((c) => (
                 <button
                   key={c}
@@ -381,7 +371,7 @@ export default function LevelEditor() {
                   aria-pressed={selectedNode.color === c}
                   onClick={() => commit(setColor(level, selectedNode.id, c))}
                 >
-                  {c === "red" ? "▲ Dreieck-Farbe" : "◆ Raute-Farbe"}
+                  {c === "red" ? t('dreieckfarbe2') : t('rautefarbe2')}
                 </button>
               ))}
             </div>
@@ -389,22 +379,22 @@ export default function LevelEditor() {
 
           {selectedNode.type === "timer" && (
             <div className="stepper">
-              <span>Zerfällt nach</span>
-              <button className="tool" aria-label="Limit verringern" onClick={() => commit(setLimit(level, selectedNode.id, (selectedNode.limit ?? 1) - 1))}>
+              <span>{t('zerflltNach')}</span>
+              <button className="tool" aria-label={t('limitVerringern')} onClick={() => commit(setLimit(level, selectedNode.id, (selectedNode.limit ?? 1) - 1))}>
                 −
               </button>
-              <output>{selectedNode.limit} Zügen</output>
-              <button className="tool" aria-label="Limit erhöhen" disabled={(selectedNode.limit ?? 1) >= MAX_LIMIT} onClick={() => commit(setLimit(level, selectedNode.id, (selectedNode.limit ?? 1) + 1))}>
+              <output>{t('limitZgen', { limit: selectedNode.limit })}</output>
+              <button className="tool" aria-label={t('limitErhhen')} disabled={(selectedNode.limit ?? 1) >= MAX_LIMIT} onClick={() => commit(setLimit(level, selectedNode.id, (selectedNode.limit ?? 1) + 1))}>
                 +
               </button>
             </div>
           )}
 
-          {selectedNode.type === "mirror" && <p className="note">Zwilling: Knoten {selectedNode.pair}. Zum Ändern „Spiegel“ erneut wählen.</p>}
+          {selectedNode.type === "mirror" && <p className="note">{t('zwillingKnotenPairZumNdernSpiegelErneut', { pair: selectedNode.pair })}</p>}
 
           <div className="kinds">
             <button className="tool" disabled={isStart || selectedNode.type === "mirror" || selectedNode.type === "gate" || selectedNode.type === "timer"} onClick={() => commit(setStart(level, selectedNode.id))}>
-              Als Start setzen
+              {t('alsStartSetzen')}
             </button>
             <button
               className="tool danger"
@@ -414,14 +404,14 @@ export default function LevelEditor() {
               }}
               disabled={level.nodes.length <= 1}
             >
-              Knoten löschen
+              {t('knotenLschen')}
             </button>
           </div>
         </section>
       )}
 
       <details className="group" open>
-        <summary>Prüfung</summary>
+        <summary>{t('prfung')}</summary>
         {issues.length > 0 ? (
           <ul className="issues">
             {issues.map((i) => (
@@ -429,47 +419,47 @@ export default function LevelEditor() {
             ))}
           </ul>
         ) : !stats ? null : stats.truncated ? (
-          <p className="warn">Das Level ist zu komplex zum Prüfen. Mit weniger Knoten oder Zeitknoten geht es.</p>
+          <p className="warn">{t('dasLevelIstZuKomplexZumPrfenMitWeniger')}</p>
         ) : !stats.solvable ? (
-          <p className="warn">Dieses Level ist nicht lösbar. Prüfe Einbahnkanten, Tore, Einmal-Knoten und Zeitlimits.</p>
+          <p className="warn">{t('diesesLevelIstNichtLsbarPrfe')}</p>
         ) : (
           <>
             <dl className="stats">
-              <div><dt>Kürzeste Lösung</dt><dd>{stats.moves} Züge</dd></div>
-              <div><dt>Lösungswege</dt><dd>{stats.shortestSolutions}</dd></div>
-              <div><dt>Sackgassen</dt><dd>{stats.trapPct} %</dd></div>
-              <div><dt>Schwierigkeit</dt><dd>{difficulty} (Schätzung)</dd></div>
+              <div><dt>{t('krzesteLsung')}</dt><dd>{t('movesZge', { moves: stats.moves })}</dd></div>
+              <div><dt>{t('lsungswege')}</dt><dd>{stats.shortestSolutions}</dd></div>
+              <div><dt>{t('sackgassen')}</dt><dd>{stats.trapPct} %</dd></div>
+              <div><dt>{t('schwierigkeit')}</dt><dd>{t('difficultySchtzung', { difficulty })}</dd></div>
             </dl>
             <button className="link" onClick={() => setShowSolution((s) => !s)}>
-              {showSolution ? "Lösungsweg verbergen" : "Lösungsweg anzeigen"}
+              {showSolution ? t('lsungswegVerbergen') : t('lsungswegAnzeigen')}
             </button>
             {solution && <p className="note">{solution.join(" → ")}</p>}
           </>
         )}
-        <p className="note">{level.nodes.length} von {MAX_NODES} Knoten</p>
+        <p className="note">{t('lengthVonMaxNodesKnoten', { length: level.nodes.length, MAX_NODES })}</p>
       </details>
 
       <details className="group">
-        <summary>Zufallslevel</summary>
+        <summary>{t('zufallslevel')}</summary>
         <label className="slider">
-          <span>Knoten</span>
+          <span>{t('knoten', 'Knoten')}</span>
           <input type="range" min={GEN_MIN_NODES} max={GEN_MAX_NODES} value={gen.nodes} onChange={(e) => setGen({ ...gen, nodes: Number(e.target.value) })} />
           <output>{gen.nodes}</output>
         </label>
-        <div className="kinds" role="group" aria-label="Schwierigkeit">
+        <div className="kinds" role="group" aria-label={t('schwierigkeit')}>
           {DIFFICULTIES.map((d) => (
             <button key={d.id} className={`tool ${gen.difficulty === d.id ? "on" : ""}`} aria-pressed={gen.difficulty === d.id} onClick={() => setGen({ ...gen, difficulty: d.id })}>
-              {d.label}
+              {t(d.label)}
             </button>
           ))}
         </div>
         {(
           [
-            ["oneWay", "Einbahnkanten"],
-            ["once", "Einmal-Knoten"],
-            ["colors", "Farben und Tore"],
-            ["timers", "Zeitknoten"],
-            ["mirror", "Spiegelpaar"],
+            ["oneWay", t('einbahnkanten')],
+            ["once", t('einmalKnoten')],
+            ["colors", t('farbenUndTore', 'Farben und Tore')],
+            ["timers", t('zeitknoten')],
+            ["mirror", t('spiegelpaar')],
           ] as [keyof GenSettings, string][]
         ).map(([k, label]) => (
           <label key={k} className="check">
@@ -478,63 +468,63 @@ export default function LevelEditor() {
           </label>
         ))}
         <button className="btn primary" onClick={generate} disabled={busy}>
-          {busy ? "Suche läuft …" : "Zufallslevel erzeugen"}
+          {busy ? t('sucheLuft') : t('zufallslevelErzeugen')}
         </button>
-        <p className="note">Ersetzt das aktuelle Level, mit „Rückgängig“ holst du es zurück. Bearbeiten kannst du das Ergebnis danach wie jedes andere.</p>
+        <p className="note">{t('ersetztDasAktuelleLevelMitRckgngigHolst')}</p>
       </details>
 
       <details className="group" open>
-        <summary>Testen, speichern und teilen</summary>
+        <summary>{t('testenSpeichernUndTeilen')}</summary>
         <div className="actions">
           {canShare ? (
             <a className="btn primary" href={`/play/custom#${code}`}>
-              Testen
+              {t('testen')}
             </a>
           ) : (
-            <span className="btn disabled" aria-disabled="true">Testen</span>
+            <span className="btn disabled" aria-disabled="true">{t('testen')}</span>
           )}
           <button className="btn" onClick={share} disabled={!canShare}>
-            Link teilen
+            {t('linkTeilen')}
           </button>
           <button className="btn" onClick={save}>
-            Speichern
+            {t('speichern')}
           </button>
           <button className="btn" onClick={newLevel}>
-            Neues Level
+            {t('neuesLevel')}
           </button>
         </div>
-        {!canShare && <p className="note">Zum Testen und Teilen muss das Level fehlerfrei und lösbar sein und mindestens 3 Knoten haben.</p>}
-        {canShare && <input className="field mono" readOnly value={shareUrl} aria-label="Link zum Level" onFocus={(e) => e.currentTarget.select()} />}
+        {!canShare && <p className="note">{t('zumTestenUndTeilenMussDasLevelFehlerfrei')}</p>}
+        {canShare && <input className="field mono" readOnly value={shareUrl} aria-label={t('linkZumLevel')} onFocus={(e) => e.currentTarget.select()} />}
 
-        <label className="field-label" htmlFor="import">Level-Code oder Link einfügen</label>
+        <label className="field-label" htmlFor="import">{t('levelcodeOderLinkEinfgen')}</label>
         <div className="row-gap">
-          <input id="import" className="field mono" value={importText} onChange={(e) => setImportText(e.target.value)} placeholder="P1.…" />
+          <input id="import" className="field mono" value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={t('p1')} />
           <button className="btn" onClick={importCode} disabled={!importText.trim()}>
-            Laden
+            {t('laden')}
           </button>
         </div>
 
         <details>
-          <summary>Für Entwickler</summary>
+          <summary>{t('frEntwickler')}</summary>
           <button
             className="btn"
-            onClick={async () => setNotice((await copyText(JSON.stringify(level, null, 2))) ? "JSON kopiert." : "Kopieren war nicht möglich.")}
+            onClick={async () => setNotice((await copyText(JSON.stringify(level, null, 2))) ? t('jsonKopiert') : t('kopierenWarNichtMglich'))}
           >
-            Level als JSON kopieren
+            {t('levelAlsJsonKopieren')}
           </button>
-          <p className="note">Zum Aufnehmen in die Kampagne: als <code>src/levels/level-NN.json</code> ablegen, id setzen und in <code>levels.ts</code> eintragen.</p>
+          <p className="note"><Trans i18nKey="zumAufnehmenInDieKampagneAls">Zum Aufnehmen in die Kampagne: als <code>src/levels/level-NN.json</code> ablegen, id setzen und in <code>levels.ts</code> eintragen.</Trans></p>
         </details>
       </details>
 
       {saved && saved.levels.length > 0 && (
         <details className="group" open>
-          <summary>Meine Level ({saved.levels.length})</summary>
+          <summary>{t('meineLevelLength', { length: saved.levels.length })}</summary>
           <ul className="mylevels">
             {saved.levels.map((l) => (
               <li key={l.key}>
                 <span className="mylevel-name">
                   {l.name}
-                  {l.par !== null && <small> · {l.par} Züge</small>}
+                  {l.par !== null && <small> {t('parZge', { par: l.par })}</small>}
                 </span>
                 <span className="mylevel-actions">
                   <button
@@ -545,21 +535,21 @@ export default function LevelEditor() {
                       else setNotice(d.error);
                     }}
                   >
-                    Bearbeiten
+                    {t('bearbeiten')}
                   </button>
                   <a className="tool" href={`/play/custom#${l.code}`}>
-                    Spielen
+                    {t('spielen')}
                   </a>
                   <button
                     className="tool danger"
                     onClick={() => {
-                      if (window.confirm(`„${l.name}“ löschen?`)) {
+                      if (window.confirm(t('nameLschen', { name: l.name }))) {
                         deleteUserLevel(l.key);
                         if (savedKey === l.key) setSavedKey(null);
                       }
                     }}
                   >
-                    Löschen
+                    {t('lschen')}
                   </button>
                 </span>
               </li>

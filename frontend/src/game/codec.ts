@@ -1,5 +1,6 @@
 import type { LevelDef, NodeDef, NodeType, PulseColor, EdgeDef } from "./pulse-core";
 import { validateLevel } from "./pulse-solver";
+import i18next from 'i18next'
 
 export const CODE_PREFIX = "P1.";
 export const MAX_NODES = 16;
@@ -58,30 +59,30 @@ const ID_RE = /^[a-z0-9]{1,3}$/;
 const TYPES = new Set<string>(["once", "color", "gate", "timer", "mirror"]);
 
 function parseNode(s: unknown): NodeDef | string {
-  if (typeof s !== "string") return "Knoten ungültig";
+  if (typeof s !== "string") return i18next.t('knotenUngltig');
   const m = NODE_RE.exec(s);
-  if (!m) return `Knoten „${s.slice(0, 20)}“ ungültig`;
+  if (!m) return i18next.t('knotenSUngltig', { s: s.slice(0, 20) });
   const [, id, xs, ys, type, extra] = m;
   const x = Number(xs);
   const y = Number(ys);
-  if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return "Koordinaten außerhalb des Spielfelds";
+  if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return i18next.t('koordinatenAuerhalbDesSpielfelds');
   const node: NodeDef = { id, x, y };
   if (!type) {
-    if (extra) return "Knoten ungültig";
+    if (extra) return i18next.t('knotenUngltig');
     return node;
   }
-  if (!TYPES.has(type)) return `Unbekannte Knotenart „${type.slice(0, 12)}“`;
+  if (!TYPES.has(type)) return i18next.t('unbekannteKnotenartType', { type: type.slice(0, 12) });
   node.type = type as NodeType;
   if (type === "once") {
-    if (extra) return "Einmal-Knoten ohne Zusatz erwartet";
+    if (extra) return i18next.t('einmalknotenOhneZusatzErwartet');
   } else if (type === "color" || type === "gate") {
-    if (extra !== "red" && extra !== "blue") return "Farbe ungültig";
+    if (extra !== "red" && extra !== "blue") return i18next.t('farbeUngltig');
     node.color = extra as PulseColor;
   } else if (type === "timer") {
-    if (!extra || !/^\d{1,2}$/.test(extra) || Number(extra) < 1) return "Zeitlimit ungültig";
+    if (!extra || !/^\d{1,2}$/.test(extra) || Number(extra) < 1) return i18next.t('zeitlimitUngltig');
     node.limit = Number(extra);
   } else if (type === "mirror") {
-    if (!extra || !ID_RE.test(extra)) return "Spiegelzwilling ungültig";
+    if (!extra || !ID_RE.test(extra)) return i18next.t('spiegelzwillingUngltig');
     node.pair = extra;
   }
   return node;
@@ -89,41 +90,41 @@ function parseNode(s: unknown): NodeDef | string {
 
 export function decodeLevel(input: string, strict = true): DecodeResult {
   const code = input.trim().split("#").pop() ?? "";
-  if (!code.startsWith(CODE_PREFIX)) return { error: "Das ist kein Pulse-Level-Code." };
-  if (code.length > MAX_CODE_LENGTH) return { error: "Der Code ist zu lang." };
+  if (!code.startsWith(CODE_PREFIX)) return { error: i18next.t('dasIstKeinPulselevelcode') };
+  if (code.length > MAX_CODE_LENGTH) return { error: i18next.t('derCodeIstZuLang') };
   const body = code.slice(CODE_PREFIX.length);
-  if (!/^[A-Za-z0-9_-]+$/.test(body)) return { error: "Der Code enthält ungültige Zeichen." };
+  if (!/^[A-Za-z0-9_-]+$/.test(body)) return { error: i18next.t('derCodeEnthltUngltigeZeichen') };
 
   let data: unknown;
   try {
     data = JSON.parse(fromBase64Url(body));
   } catch {
-    return { error: "Der Code ist beschädigt." };
+    return { error: i18next.t('derCodeIstBeschdigt') };
   }
-  if (typeof data !== "object" || data === null || Array.isArray(data)) return { error: "Der Code ist beschädigt." };
+  if (typeof data !== "object" || data === null || Array.isArray(data)) return { error: i18next.t('derCodeIstBeschdigt') };
   const w = data as Record<string, unknown>;
   if (typeof w.n !== "string" || typeof w.s !== "string" || !Array.isArray(w.v) || !Array.isArray(w.e)) {
-    return { error: "Der Code ist unvollständig." };
+    return { error: i18next.t('derCodeIstUnvollstndig') };
   }
-  if (w.v.length < 1 || w.v.length > MAX_NODES) return { error: `Ein Level hat 1 bis ${MAX_NODES} Knoten.` };
-  if (w.e.length > MAX_EDGES) return { error: "Zu viele Kanten." };
+  if (w.v.length < 1 || w.v.length > MAX_NODES) return { error: i18next.t('einLevelHat1BisMaxNodesKnoten', { MAX_NODES }) };
+  if (w.e.length > MAX_EDGES) return { error: i18next.t('zuVieleKanten', 'Zu viele Kanten.') };
 
   const nodes: NodeDef[] = [];
   for (const raw of w.v) {
     const n = parseNode(raw);
     if (typeof n === "string") return { error: n };
-    if (nodes.some((x) => x.id === n.id)) return { error: `Doppelte Knoten-ID ${n.id}` };
+    if (nodes.some((x) => x.id === n.id)) return { error: i18next.t('doppelteKnotenidId', { id: n.id }) };
     nodes.push(n);
   }
-  if (!ID_RE.test(w.s) || !nodes.some((n) => n.id === w.s)) return { error: "Startknoten fehlt." };
+  if (!ID_RE.test(w.s) || !nodes.some((n) => n.id === w.s)) return { error: i18next.t('startknotenFehlt') };
 
   const edges: EdgeDef[] = [];
   for (const raw of w.e) {
     const m = typeof raw === "string" ? EDGE_RE.exec(raw) : null;
-    if (!m) return { error: "Kante ungültig." };
+    if (!m) return { error: i18next.t('kanteUngltig') };
     const [, from, op, to] = m;
     if (!nodes.some((n) => n.id === from) || !nodes.some((n) => n.id === to) || from === to) {
-      return { error: "Kante verweist auf einen unbekannten Knoten." };
+      return { error: i18next.t('kanteVerweistAufEinenUnbekanntenKnoten') };
     }
     edges.push(op === ">" ? { from, to, oneWay: true } : { from, to });
   }

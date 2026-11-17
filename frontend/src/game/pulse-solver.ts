@@ -6,6 +6,7 @@ import {
   legalMoves,
   move,
 } from "./pulse-core";
+import i18next from 'i18next'
 
 export interface SolveResult {
   solvable: boolean;
@@ -93,37 +94,37 @@ export function validateLevel(level: LevelDef): string[] {
   const ids = new Set<string>();
 
   for (const n of level.nodes) {
-    if (ids.has(n.id)) issues.push(`Doppelte Knoten-ID: ${n.id}`);
+    if (ids.has(n.id)) issues.push(i18next.t('doppelteKnotenidId', { id: n.id }));
     ids.add(n.id);
     if (n.x < 0 || n.x > 1 || n.y < 0 || n.y > 1) {
-      issues.push(`Knoten ${n.id} liegt außerhalb von 0..1`);
+      issues.push(i18next.t('knotenIdLiegtAuerhalbVon01', { id: n.id }));
     }
     if ((n.type === "color" || n.type === "gate") && !n.color) {
-      issues.push(`Knoten ${n.id} (${n.type}) hat keine Farbe`);
+      issues.push(i18next.t('knotenIdTypeHatKeineFarbe', { id: n.id, type: n.type }));
     }
     if (n.type === "timer" && !(Number.isInteger(n.limit) && n.limit! >= 1)) {
-      issues.push(`Zeitknoten ${n.id} braucht ein ganzzahliges limit ab 1`);
+      issues.push(i18next.t('zeitknotenIdBrauchtEinGanzzahligesLimit', { id: n.id }));
     }
     if (n.type === "mirror") {
       const twin = level.nodes.find((x) => x.id === n.pair);
       if (!twin || twin.type !== "mirror" || twin.pair !== n.id || twin.id === n.id) {
-        issues.push(`Spiegelknoten ${n.id} braucht einen Zwilling, der zurück auf ihn zeigt`);
+        issues.push(i18next.t('spiegelknotenIdBrauchtEinenZwillingDer', { id: n.id }));
       }
     }
   }
 
-  if (!ids.has(level.start)) issues.push(`Startknoten ${level.start} existiert nicht`);
+  if (!ids.has(level.start)) issues.push(i18next.t('startknotenStartExistiertNicht', { start: level.start }));
   const startNode = level.nodes.find((n) => n.id === level.start);
   if (startNode && (startNode.type === "mirror" || startNode.type === "gate" || startNode.type === "timer")) {
-    issues.push("Der Startknoten darf kein Spiegel-, Tor- oder Zeitknoten sein");
+    issues.push(i18next.t('derStartknotenDarfKeinSpiegelTorOder'));
   }
 
   const byId = new Map(level.nodes.map((n) => [n.id, n]));
   for (const e of level.edges) {
     const a = byId.get(e.from);
-    if (a?.type === "mirror" && a.pair === e.to) issues.push(`Zwillinge ${e.from} und ${e.to} dürfen keine Kante teilen`);
-    if (!ids.has(e.from)) issues.push(`Kante verweist auf unbekannten Knoten: ${e.from}`);
-    if (!ids.has(e.to)) issues.push(`Kante verweist auf unbekannten Knoten: ${e.to}`);
+    if (a?.type === "mirror" && a.pair === e.to) issues.push(i18next.t('zwillingeFromUndToDrfenKeineKanteTeilen', { from: e.from, to: e.to }));
+    if (!ids.has(e.from)) issues.push(i18next.t('kanteVerweistAufUnbekanntenKnotenFrom', { from: e.from }));
+    if (!ids.has(e.to)) issues.push(i18next.t('kanteVerweistAufUnbekanntenKnotenTo', { to: e.to }));
   }
 
   if (ids.has(level.start)) {
@@ -148,7 +149,7 @@ export function validateLevel(level: LevelDef): string[] {
       }
     }
     for (const id of ids) {
-      if (!seen.has(id)) issues.push(`Knoten ${id} ist vom Start aus nie erreichbar`);
+      if (!seen.has(id)) issues.push(i18next.t('knotenIdIstVomStartAusNieErreichbar', { id }));
     }
   }
 

@@ -3,7 +3,6 @@ import Link from "next/link";
 export interface Action {
   href: string;
   label: string;
-  /** true für Links mit #-Code: ein normaler Seitenaufruf, damit der Code sicher mitkommt. */
   external?: boolean;
 }
 

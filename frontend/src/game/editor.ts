@@ -1,5 +1,6 @@
 import type { EdgeDef, LevelDef, NodeDef, PulseColor } from "./pulse-core";
 import { MAX_NODES } from "./codec";
+import i18next from 'i18next'
 
 export { MAX_NODES };
 
@@ -20,7 +21,7 @@ export function nearestCell(x: number, y: number) {
 }
 
 export function emptyLevel(): LevelDef {
-  return { id: 0, name: "Neues Level", start: "a", nodes: [{ id: "a", x: cellX(1), y: cellY(2) }], edges: [] };
+  return { id: 0, name: i18next.t('neuesLevel', 'Neues Level'), start: "a", nodes: [{ id: "a", x: cellX(1), y: cellY(2) }], edges: [] };
 }
 
 function nextId(level: LevelDef): string | null {

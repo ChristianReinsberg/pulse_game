@@ -4,6 +4,9 @@ import Link from "next/link";
 import { LEVELS, PAR } from "@/lib/levels";
 import { isUnlocked, resetProgress, type Progress } from "@/lib/progress";
 import { useProgress } from "@/lib/useProgress";
+import "@/i18n";
+import { useTranslation } from 'react-i18next'
+import LanguageSelector from "./LanguageSelector";
 
 type Status = "loading" | "locked" | "open" | "done" | "perfect";
 
@@ -15,28 +18,31 @@ function statusOf(progress: Progress | null, id: number): Status {
 }
 
 export default function LevelSelect() {
+  const { t } = useTranslation()
   const progress = useProgress();
   const solved = progress ? LEVELS.filter((l) => progress.best[l.id] !== undefined).length : 0;
   const resume = progress
     ? (LEVELS.find((l) => progress.best[l.id] === undefined) ?? LEVELS[LEVELS.length - 1]).id
     : LEVELS[0].id;
+  
 
   return (
     <main className="screen">
       <header className="hero">
-        <h1>Pulse</h1>
-        <p>Leite den Impuls durch das Netz und aktiviere jeden Knoten.</p>
+        <h1>{t('pulse')}</h1>
+        <p>{t('leiteDenImpulsDurchDasNetzUndAktiviere')}</p>
+        <LanguageSelector />
       </header>
 
       <div className="progress" aria-live="polite">
-        <span>{progress ? `${solved} von ${LEVELS.length} gelöst` : "\u00a0"}</span>
+        <span>{progress ? t('solvedVonLengthGelst', { solved: solved, length: LEVELS.length }) : "\u00a0"}</span>
         <div className="bar" aria-hidden>
           <div className="fill" style={{ width: `${(solved / LEVELS.length) * 100}%` }} />
         </div>
       </div>
 
       <Link className="btn primary" href={`/play/${resume}`} aria-disabled={!progress}>
-        {solved === 0 ? "Spiel starten" : solved === LEVELS.length ? "Noch einmal spielen" : "Weiterspielen"}
+        {solved === 0 ? t('spielStarten') : solved === LEVELS.length ? t('nochEinmalSpielen') : t('weiterspielen')}
       </Link>
 
       <ul className="grid">
@@ -47,21 +53,21 @@ export default function LevelSelect() {
             <>
               <span className="num">{s === "locked" ? "🔒" : l.id}</span>
               <span className="meta">
-                {s === "perfect" && "★ perfekt"}
-                {s === "done" && `${best} Züge`}
-                {s === "open" && "offen"}
-                {s === "locked" && "gesperrt"}
+                {s === "perfect" && t('perfekt2')}
+                {s === "done" && t('bestZge', { best })}
+                {s === "open" && t('offen')}
+                {s === "locked" && t('gesperrt')}
               </span>
             </>
           );
           return (
             <li key={l.id}>
               {s === "locked" || s === "loading" ? (
-                <div className={`tile ${s}`} aria-disabled="true" aria-label={`Level ${l.id}, ${s === "locked" ? "gesperrt" : "lädt"}`}>
+                <div className={`tile ${s}`} aria-disabled="true" aria-label={t('levelIdVal', { id: l.id, val: s === "locked" ? "gesperrt" : "lädt" })}>
                   {inner}
                 </div>
               ) : (
-                <Link className={`tile ${s}`} href={`/play/${l.id}`} aria-label={`Level ${l.id}: ${l.name}`}>
+                <Link className={`tile ${s}`} href={`/play/${l.id}`} aria-label={t('levelIdName', { id: l.id, name: l.name })}>
                   {inner}
                 </Link>
               )}
@@ -71,23 +77,23 @@ export default function LevelSelect() {
       </ul>
 
       <Link className="btn" href="/editor">
-        Eigene Level bauen
+        {t('eigeneLevelBauen')}
       </Link>
 
       <Link className="link" href="/settings">
-        Einstellungen
+        {t('einstellungen')}
       </Link>
 
-      <p className="teaser">Weitere Level mit Timer- und Spiegelknoten folgen in der Vollversion.</p>
+      <p className="teaser">{t('weitereLevelMitTimerUndSpiegelknoten')}</p>
 
       {progress && solved > 0 && (
         <button
           className="link"
           onClick={() => {
-            if (window.confirm("Fortschritt wirklich zurücksetzen?")) resetProgress();
+            if (window.confirm(t('fortschrittWirklichZurcksetzen'))) resetProgress();
           }}
         >
-          Fortschritt zurücksetzen
+          {t('fortschrittZurcksetzen')}
         </button>
       )}
     </main>
